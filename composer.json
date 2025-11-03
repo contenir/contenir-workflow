@@ -1,0 +1,43 @@
+{
+    "name": "contenir/workflow",
+    "description": "Database-driven workflow system for Mezzio that generates routes and navigation from hierarchical page structures",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["mezzio", "workflow", "cms", "routing", "navigation"],
+    "authors": [
+        {
+            "name": "Contenir",
+            "email": "hello@contenir.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2 || ^8.3",
+        "psr/container": "^1.0 || ^2.0",
+        "psr/http-message": "^1.0 || ^2.0",
+        "psr/http-server-handler": "^1.0",
+        "psr/http-server-middleware": "^1.0",
+        "mezzio/mezzio": "^3.0",
+        "laminas/laminas-cache": "^3.0",
+        "laminas/laminas-cache-storage-adapter-filesystem": "^2.0",
+        "laminas/laminas-servicemanager": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "squizlabs/php_codesniffer": "^3.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Contenir\\Workflow\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Contenir\\Workflow\\Test\\": "test/"
+        }
+    },
+    "extra": {
+        "laminas": {
+            "config-provider": "Contenir\\Workflow\\ConfigProvider"
+        }
+    }
+}
