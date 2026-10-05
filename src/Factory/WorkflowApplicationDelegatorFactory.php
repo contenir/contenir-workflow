@@ -4,51 +4,56 @@ declare(strict_types=1);
 
 namespace Contenir\Workflow\Factory;
 
+use Contenir\Workflow\Container\WorkflowConfig;
 use Contenir\Workflow\Strategy\ResourceStrategy;
+use Contenir\Workflow\Strategy\RouteRegistrar;
+use InvalidArgumentException;
+use Laminas\Cache\Exception\ExceptionInterface as CacheException;
 use Mezzio\Application;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
+use function sprintf;
+
 /**
- * Delegator factory that registers workflow-generated routes with the Application
+ * Delegator factory for Mezzio\Application that registers the
+ * workflow-generated routes when the application is created. Does nothing
+ * when there is no "workflow_manager" config.
+ *
+ * @api
  */
-class WorkflowApplicationDelegatorFactory
+final class WorkflowApplicationDelegatorFactory
 {
-    public function __invoke(
-        ContainerInterface $container,
-        string $name,
-        callable $callback
-    ): Application {
-        /** @var Application $app */
-        $app = $callback();
+    /**
+     * @param callable(): Application $callback
+     *
+     * @throws CacheException
+     * @throws ContainerExceptionInterface
+     * @throws InvalidArgumentException When no strategy is configured or it is not a ResourceStrategy.
+     *
+     * @mago-expect analysis:mixed-assignment Container services are untyped; the type is checked here.
+     * @mago-expect analysis:unused-parameter The delegator signature passes the service name.
+     */
+    public function __invoke(ContainerInterface $container, string $name, callable $callback): Application
+    {
+        $app    = $callback();
+        $config = WorkflowConfig::fromContainer($container);
 
-        // Get configuration
-        $config = $container->get('config');
-
-        if (!isset($config['workflow_manager'])) {
-            // No workflow configuration - return app as-is
+        if (null === $config) {
             return $app;
         }
 
-        $workflowConfig = $config['workflow_manager'];
-
-        if (!isset($workflowConfig['strategy'])) {
-            throw new \InvalidArgumentException('No strategy configured in workflow_manager');
+        $strategyName = $config->requiredString('strategy');
+        $strategy     = $container->get($strategyName);
+        if (! $strategy instanceof ResourceStrategy) {
+            throw new InvalidArgumentException(sprintf(
+                'Service "%s" must be a %s',
+                $strategyName,
+                ResourceStrategy::class,
+            ));
         }
 
-        // Get strategy and routes
-        /** @var ResourceStrategy $strategy */
-        $strategy = $container->get($workflowConfig['strategy']);
-        $routes = $strategy->getRouteConfig();
-
-        // Register each route with Mezzio
-        foreach ($routes as $routeName => $routeConfig) {
-            $app->route(
-                $routeConfig['path'],
-                $routeConfig['middleware'],
-                $routeConfig['methods'] ?? ['GET'],
-                $routeName
-            );
-        }
+        RouteRegistrar::register($app, $strategy->getRouteConfig());
 
         return $app;
     }
