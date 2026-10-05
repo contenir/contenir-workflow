@@ -13,7 +13,7 @@ constraint and check the points below.
 | laminas/laminas-diactoros | ^3.0 | ^3.3 |
 
 ```bash
-composer require contenir/contenir-workflow:^2.0
+composer require contenir/contenir-workflow-mezzio:^2.0
 ```
 
 Projects that must stay on 0.x can keep using `^0.1`, maintained on the
@@ -149,3 +149,15 @@ class under `WorkflowPluginManager::class` instead.
 // 0.x: /archive
 // 2.0: /archive/0
 ```
+
+## Package renamed in 2.1
+
+From 2.1, the package is published as `contenir/contenir-workflow-mezzio`. It declares
+`replace` for `contenir/contenir-workflow`, so the two can never be installed together.
+Switch the requirement:
+
+```bash
+composer remove contenir/contenir-workflow && composer require contenir/contenir-workflow-mezzio:^2.1
+```
+
+No code changes are needed: namespaces and classes are unchanged.
