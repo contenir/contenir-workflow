@@ -1,5 +1,5 @@
 {
-    "name": "contenir/contenir-workflow",
+    "name": "contenir/contenir-workflow-mezzio",
     "description": "Database-driven workflow system for Mezzio that generates routes and navigation from hierarchical page structures",
     "type": "library",
     "license": "MIT",
@@ -26,6 +26,9 @@
         "infection/infection": "^0.34.1",
         "php-db/phpdb-qa-tools": "0.1.x-dev",
         "phpunit/phpunit": "^11.5.42"
+    },
+    "replace": {
+        "contenir/contenir-workflow": "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -70,7 +73,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0.x-dev"
+            "dev-master": "2.1.x-dev"
         },
         "laminas": {
             "config-provider": "Contenir\\Workflow\\ConfigProvider"

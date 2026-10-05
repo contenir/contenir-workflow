@@ -1,7 +1,9 @@
-# contenir/contenir-workflow
+# contenir/contenir-workflow-mezzio
 
-[![Continuous Integration](https://github.com/contenir/contenir-workflow/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/contenir/contenir-workflow/actions/workflows/continuous-integration.yml)
-[![codecov](https://codecov.io/gh/contenir/contenir-workflow/graph/badge.svg)](https://codecov.io/gh/contenir/contenir-workflow)
+Formerly `contenir/contenir-workflow`; the old package is abandoned in favour of this one.
+
+[![Continuous Integration](https://github.com/contenir/contenir-workflow-mezzio/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/contenir/contenir-workflow-mezzio/actions/workflows/continuous-integration.yml)
+[![codecov](https://codecov.io/gh/contenir/contenir-workflow-mezzio/graph/badge.svg)](https://codecov.io/gh/contenir/contenir-workflow-mezzio)
 
 Database-driven workflow system for [Mezzio](https://docs.mezzio.dev/) that
 generates routes and navigation from a hierarchical page structure, for
@@ -27,7 +29,7 @@ see [UPGRADE-2.0.md](UPGRADE-2.0.md).
 ## Install
 
 ```bash
-composer require contenir/contenir-workflow
+composer require contenir/contenir-workflow-mezzio
 ```
 
 With [laminas-component-installer](https://docs.laminas.dev/laminas-component-installer/)
