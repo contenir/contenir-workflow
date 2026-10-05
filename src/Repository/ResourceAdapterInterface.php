@@ -8,6 +8,8 @@ use Contenir\Workflow\ResourceInterface;
 
 /**
  * Adapter interface for fetching resources from a data source
+ *
+ * @api
  */
 interface ResourceAdapterInterface
 {
