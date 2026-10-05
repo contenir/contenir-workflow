@@ -155,6 +155,7 @@ composer static-analysis   # mago analyze
 composer test              # unit suite: collaborators doubled, no I/O
 composer test-integration  # integration suite: real ServiceManager and Mezzio Application
 composer test-coverage     # both suites, clover.xml for Codecov
+composer mutation-test     # Infection mutation testing over both suites (needs Xdebug or PCOV)
 ```
 
 ## License

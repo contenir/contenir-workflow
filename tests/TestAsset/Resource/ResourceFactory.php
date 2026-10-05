@@ -25,6 +25,20 @@ final class ResourceFactory
     }
 
     /**
+     * Yields every resource under the same key, as merged iterators can.
+     *
+     * @param list<ResourceInterface> $resources
+     *
+     * @return Generator<int, ResourceInterface>
+     */
+    public static function generateUnderOneKey(array $resources): Generator
+    {
+        foreach ($resources as $resource) {
+            yield 0 => $resource;
+        }
+    }
+
+    /**
      * A page with the given middleware and children.
      *
      * @param iterable<ResourceInterface> $children

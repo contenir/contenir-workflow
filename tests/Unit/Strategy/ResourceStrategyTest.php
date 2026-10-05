@@ -9,6 +9,7 @@ use Contenir\Workflow\Strategy\ResourceStrategy;
 use Contenir\Workflow\Tests\TestAsset\Repository\InMemoryResourceAdapter;
 use Contenir\Workflow\Tests\TestAsset\Resource\FakeResource;
 use Contenir\Workflow\Tests\TestAsset\Resource\ResourceFactory;
+use Contenir\Workflow\Tests\TestAsset\Strategy\TracingResourceStrategy;
 use Contenir\Workflow\Tests\TestAsset\Strategy\TypedResourceStrategy;
 use Contenir\Workflow\Tests\TestAsset\Workflow\ConfigurableWorkflow;
 use Contenir\Workflow\Tests\Trait\InMemoryCacheTrait;
@@ -41,8 +42,9 @@ final class ResourceStrategyTest extends TestCase
         ];
 
         return [
-            'array'     => [$children],
-            'generator' => [ResourceFactory::generate($children)],
+            'array'                    => [$children],
+            'generator'                => [ResourceFactory::generate($children)],
+            'generator repeating keys' => [ResourceFactory::generateUnderOneKey($children)],
         ];
     }
 
@@ -175,6 +177,20 @@ final class ResourceStrategyTest extends TestCase
     }
 
     #[Test]
+    public function keepsAPageTheWorkflowHides(): void
+    {
+        $workflow = $this->createStub(WorkflowInterface::class);
+        $workflow->method('getRouteId')->willReturn('page-1');
+        $workflow->method('getRouteConfig')->willReturn(null);
+        $workflow->method('getNavigationConfig')
+            ->willReturn(['label' => 'About', 'route' => 'page-1', 'visible' => false]);
+
+        $strategy = $this->strategy([new FakeResource()], $workflow);
+
+        static::assertFalse($strategy->getNavigationConfig()[0]['visible']);
+    }
+
+    #[Test]
     public function letsACustomStrategyChooseTheWorkflowPerResource(): void
     {
         $pluginManager = $this->createMock(PluginManagerInterface::class);
@@ -188,6 +204,20 @@ final class ResourceStrategyTest extends TestCase
             $pluginManager,
             $this->createInMemoryCache(),
         ))->getRouteConfig();
+    }
+
+    #[Test]
+    public function letsACustomStrategyDecorateEveryProtectedHook(): void
+    {
+        $strategy = new TracingResourceStrategy(
+            new InMemoryResourceAdapter([ResourceFactory::page(1, 'about')]),
+            $this->pluginManager(new PageWorkflow()),
+            $this->createInMemoryCache(),
+        );
+
+        $strategy->getNavigationConfig();
+
+        static::assertSame(['build', 'process', 'workflow page-1', 'page page-1'], $strategy->trace);
     }
 
     /**
