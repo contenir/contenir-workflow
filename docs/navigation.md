@@ -25,4 +25,5 @@ a folder with no middleware). Values the workflow's `getNavigationConfig()`
 leaves out default to `visible: true`, `lastmod: null`, `changefreq: weekly`
 and `priority: 0.5`.
 
-Override `ResourceStrategy::getNavigationPage()` to change the page shape.
+To change the page shape, extend `AbstractResourceStrategy` and override
+`getNavigationPage()`.

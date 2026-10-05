@@ -9,6 +9,7 @@ use Contenir\Workflow\Strategy\ResourceStrategy;
 use Contenir\Workflow\Tests\TestAsset\Repository\InMemoryResourceAdapter;
 use Contenir\Workflow\Tests\TestAsset\Resource\FakeResource;
 use Contenir\Workflow\Tests\TestAsset\Resource\ResourceFactory;
+use Contenir\Workflow\Tests\TestAsset\Strategy\TypedResourceStrategy;
 use Contenir\Workflow\Tests\TestAsset\Workflow\ConfigurableWorkflow;
 use Contenir\Workflow\Tests\Trait\InMemoryCacheTrait;
 use Contenir\Workflow\Workflow\PageWorkflow;
@@ -171,6 +172,22 @@ final class ResourceStrategyTest extends TestCase
             ],
             $strategy->getNavigationConfig(),
         );
+    }
+
+    #[Test]
+    public function letsACustomStrategyChooseTheWorkflowPerResource(): void
+    {
+        $pluginManager = $this->createMock(PluginManagerInterface::class);
+        $pluginManager->expects($this->once())
+            ->method('get')
+            ->with('article-workflow')
+            ->willReturn(new ConfigurableWorkflow());
+
+        (new TypedResourceStrategy(
+            new InMemoryResourceAdapter([new FakeResource(type: 'article')]),
+            $pluginManager,
+            $this->createInMemoryCache(),
+        ))->getRouteConfig();
     }
 
     /**

@@ -23,7 +23,7 @@ Registers the routes once, when the `Application` service is created:
 
 Without a `workflow_manager` config it returns the application unchanged.
 With one, `workflow_manager.strategy` is required and must resolve to a
-`ResourceStrategy`.
+`ResourceStrategyInterface`.
 
 ## Middleware
 

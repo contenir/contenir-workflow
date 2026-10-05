@@ -53,17 +53,19 @@ gets no route, only a navigation page. Pages use `monthly` and priority `0.6`.
 
 ## Custom workflows
 
-Extend `AbstractWorkflow` (or `PageWorkflow`), register it with the plugin
-manager, and pick it per resource by overriding
-`ResourceStrategy::getWorkflowType()`:
+`PageWorkflow` and `ResourceStrategy` are final. Extend
+`AbstractPageWorkflow` (the page route logic, with your own sitemap settings
+or default middleware) or `AbstractWorkflow`, register it with the plugin
+manager, and pick it per resource by extending `AbstractResourceStrategy`
+and overriding `getWorkflowType()`:
 
 ```php
-final class ArticleWorkflow extends PageWorkflow
+final class ArticleWorkflow extends AbstractPageWorkflow
 {
     protected string $changeFrequency = 'daily';
 }
 
-final class SiteStrategy extends ResourceStrategy
+final class SiteStrategy extends AbstractResourceStrategy
 {
     protected function getWorkflowType(ResourceInterface $resource): string
     {
@@ -74,5 +76,7 @@ final class SiteStrategy extends ResourceStrategy
 
 `WorkflowFactory` builds any workflow with a no-argument constructor, and
 throws `InvalidArgumentException` for an unknown class or one that does not
-implement `WorkflowInterface`. The plugin manager returns shared instances,
+implement `WorkflowInterface`. Register workflows by configuring the
+plugin manager (`setFactory()`, `setAlias()`, or a delegator on the
+`WorkflowPluginManager` service); it is final. The plugin manager returns shared instances,
 so a workflow must not keep state beyond its current resource.

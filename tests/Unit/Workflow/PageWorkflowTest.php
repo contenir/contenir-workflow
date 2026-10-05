@@ -6,6 +6,7 @@ namespace Contenir\Workflow\Tests\Unit\Workflow;
 
 use Contenir\Workflow\Tests\TestAsset\Resource\FakeResource;
 use Contenir\Workflow\Tests\TestAsset\Resource\MiddlewareResource;
+use Contenir\Workflow\Tests\TestAsset\Workflow\DailyPageWorkflow;
 use Contenir\Workflow\Workflow\PageWorkflow;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -55,6 +56,18 @@ final class PageWorkflowTest extends TestCase
         $workflow->setResource(new MiddlewareResource($middleware));
 
         static::assertNull($workflow->getRouteConfig());
+    }
+
+    #[Test]
+    public function letsACustomPageWorkflowChangeTheSitemapSettings(): void
+    {
+        $workflow = new DailyPageWorkflow();
+        $workflow->setResource(new MiddlewareResource('page.handler'));
+
+        $navigation = $workflow->getNavigationConfig();
+
+        static::assertSame(['daily', '0.9'], [$navigation['changefreq'], $navigation['priority']]);
+        static::assertNotNull($workflow->getRouteConfig());
     }
 
     #[Test]

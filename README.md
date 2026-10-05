@@ -119,13 +119,19 @@ final class PageHandler implements RequestHandlerInterface
 | `Repository\ResourceAdapterInterface` | Supplies the top-level resources |
 | `Workflow\WorkflowInterface` | Turns one resource into a route config and a navigation config |
 | `Workflow\AbstractWorkflow` | Base workflow: route id `<type>-<id>`, path from slug, navigation defaults |
-| `Workflow\PageWorkflow` | Routes a resource to its own `getMiddleware()` (or `$middleware`); monthly, priority 0.6 |
+| `Workflow\AbstractPageWorkflow` | Page route logic: routes a resource to its own `getMiddleware()` (or `$middleware`) |
+| `Workflow\PageWorkflow` | The default page workflow (final): monthly, priority 0.6 |
 | `Workflow\WorkflowPluginManager` | Plugin manager for workflows (`page`, `Page`, `PageWorkflow`) |
 | `Workflow\WorkflowFactory` | Factory for workflows with a no-argument constructor |
-| `Strategy\ResourceStrategy` | Walks the tree; `getRouteConfig()`, `getNavigationConfig()`, `clearCache()` |
+| `Strategy\ResourceStrategyInterface` | `getRouteConfig()`, `getNavigationConfig()`, `clearCache()` |
+| `Strategy\AbstractResourceStrategy` | Walks the tree and caches; extend it to customise (`getWorkflowType()`, `getNavigationPage()`) |
+| `Strategy\ResourceStrategy` | The default strategy (final) |
 | `Factory\WorkflowApplicationDelegatorFactory` | Registers the routes when the `Application` is created |
 | `Middleware\WorkflowMiddleware` | Registers the routes on the first request instead |
 | `ConfigProvider` and the `Factory\*` classes | Container wiring |
+
+Every concrete class is `final`; the abstract classes and interfaces above
+are the extension points.
 
 The [docs](docs/) folder covers each area in detail:
 
