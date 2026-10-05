@@ -1,5 +1,5 @@
 {
-    "name": "contenir/workflow",
+    "name": "contenir/contenir-workflow",
     "description": "Database-driven workflow system for Mezzio that generates routes and navigation from hierarchical page structures",
     "type": "library",
     "license": "MIT",
