@@ -43,6 +43,8 @@ breaking changes listed in [UPGRADE-2.0.md](UPGRADE-2.0.md).
 
 ### Added
 
+- `LICENSE` with the MIT licence text `composer.json` already declared.
+
 - Continuous integration on PHP 8.3, 8.4 and 8.5 against lowest, locked and
   latest dependencies, with coverage reported to Codecov.
 - Unit (no I/O) and integration (real ServiceManager and Mezzio Application)
