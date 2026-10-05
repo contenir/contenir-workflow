@@ -1,0 +1,33 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": ["src"]
+    },
+    "timeout": 10,
+    "threads": "max",
+    "logs": {
+        "text": "infection.log",
+        "summary": "summary.log",
+        "stryker": {
+            "badge": "/^(main|master)$/"
+        }
+    },
+    "mutators": {
+        "@default": true,
+        "FalseValue": {
+            "ignoreSourceCodeByRegex": [
+                // "use_parent_as_landing_page" is stored in the options of the final ResourceStrategy but never
+                // read, so its default has no observable effect.
+                ".*'use_parent_as_landing_page' => \\$config->bool\\('use_parent_as_landing_page', false\\).*"
+            ]
+        },
+        "Ternary": {
+            "ignoreSourceCodeByRegex": [
+                // process() iterates any iterable, so passing the Traversable through unconverted (or converting an
+                // array) yields the same pages; only the preserve_keys argument is observable.
+                ".*\\$children = is_array\\(\\$children\\) \\? \\$children : iterator_to_array\\(.*"
+            ]
+        }
+    },
+    "staticAnalysisTool": "mago"
+}
