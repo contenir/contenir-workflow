@@ -10,8 +10,9 @@ All settings live under the `workflow_manager` key of the application config.
 | `cache_key` | no | `WorkflowResourceCache` | `ResourceStrategyFactory` |
 | `use_parent_as_landing_page` | no | `false` | Stored in the strategy options; not yet acted on |
 
-- `strategy` is a service name that must resolve to a `ResourceStrategy`
-  (normally `ResourceStrategy::class` itself, or your subclass).
+- `strategy` is a service name that must resolve to a
+  `ResourceStrategyInterface` (normally `ResourceStrategy::class` itself, or
+  your `AbstractResourceStrategy` subclass).
 - `repository` is a service name that must resolve to a
   `Repository\ResourceAdapterInterface`.
 - `cache` is a service name that must resolve to a

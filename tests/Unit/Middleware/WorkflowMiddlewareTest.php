@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Contenir\Workflow\Tests\Unit\Middleware;
 
 use Contenir\Workflow\Middleware\WorkflowMiddleware;
-use Contenir\Workflow\Strategy\ResourceStrategy;
+use Contenir\Workflow\Strategy\ResourceStrategyInterface;
 use Mezzio\Application;
 use Mezzio\MiddlewareFactory;
 use Mezzio\Router\Route;
@@ -59,9 +59,9 @@ final class WorkflowMiddlewareTest extends TestCase
         return $handler;
     }
 
-    private function strategy(): ResourceStrategy
+    private function strategy(): ResourceStrategyInterface
     {
-        $strategy = $this->createStub(ResourceStrategy::class);
+        $strategy = $this->createStub(ResourceStrategyInterface::class);
         $strategy->method('getRouteConfig')
             ->willReturn([
                 'page-1' => [

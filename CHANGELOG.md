@@ -14,8 +14,13 @@ breaking changes listed in [UPGRADE-2.0.md](UPGRADE-2.0.md).
 
 - Requires PHP 8.3, 8.4 or 8.5, mezzio/mezzio 3.18+,
   laminas/laminas-servicemanager 3.22+ and laminas/laminas-cache 3.12+.
-- `ConfigProvider`, the `Factory\*` classes, `WorkflowMiddleware` and
-  `WorkflowFactory` are `final`.
+- Every concrete class is `final`: `ConfigProvider`, the `Factory\*`
+  classes, `WorkflowMiddleware`, `WorkflowFactory`, `ResourceStrategy`,
+  `PageWorkflow` and `WorkflowPluginManager`. Extend the new
+  `AbstractResourceStrategy` or `AbstractPageWorkflow` (or the existing
+  `AbstractWorkflow`) instead.
+- The delegator, `WorkflowMiddleware` and its factory accept any
+  `ResourceStrategyInterface` as the strategy.
 - `WorkflowPluginManager` is built by the new
   `Factory\WorkflowPluginManagerFactory` instead of a closure, so the merged
   configuration can be cached.

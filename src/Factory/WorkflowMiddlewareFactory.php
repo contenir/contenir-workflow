@@ -6,7 +6,7 @@ namespace Contenir\Workflow\Factory;
 
 use Contenir\Workflow\Container\WorkflowConfig;
 use Contenir\Workflow\Middleware\WorkflowMiddleware;
-use Contenir\Workflow\Strategy\ResourceStrategy;
+use Contenir\Workflow\Strategy\ResourceStrategyInterface;
 use InvalidArgumentException;
 use Mezzio\Application;
 use Mezzio\MiddlewareFactory;
@@ -54,7 +54,7 @@ final class WorkflowMiddlewareFactory
 
         return new WorkflowMiddleware(
             self::service($container, Application::class, Application::class),
-            self::service($container, $strategyName, ResourceStrategy::class),
+            self::service($container, $strategyName, ResourceStrategyInterface::class),
             self::service($container, MiddlewareFactory::class, MiddlewareFactory::class),
         );
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Contenir\Workflow\Middleware;
 
-use Contenir\Workflow\Strategy\ResourceStrategy;
+use Contenir\Workflow\Strategy\ResourceStrategyInterface;
 use Contenir\Workflow\Strategy\RouteRegistrar;
 use Laminas\Cache\Exception\ExceptionInterface as CacheException;
 use Mezzio\Application;
@@ -34,7 +34,7 @@ final class WorkflowMiddleware implements MiddlewareInterface
      */
     public function __construct(
         private readonly Application $app,
-        private readonly ResourceStrategy $strategy,
+        private readonly ResourceStrategyInterface $strategy,
         private readonly MiddlewareFactory $factory,
     ) {}
 

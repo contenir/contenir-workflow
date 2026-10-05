@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Contenir\Workflow\Tests\Unit\Factory;
 
 use Contenir\Workflow\Factory\WorkflowApplicationDelegatorFactory;
-use Contenir\Workflow\Strategy\ResourceStrategy;
+use Contenir\Workflow\Strategy\ResourceStrategyInterface;
 use Contenir\Workflow\Tests\TestAsset\Container\InMemoryContainer;
 use InvalidArgumentException;
 use Mezzio\Application;
@@ -29,7 +29,7 @@ final class WorkflowApplicationDelegatorFactoryTest extends TestCase
             ->with('/about', 'page.handler', ['GET'], 'page-1')
             ->willReturn($route);
 
-        $strategy = $this->createStub(ResourceStrategy::class);
+        $strategy = $this->createStub(ResourceStrategyInterface::class);
         $strategy->method('getRouteConfig')
             ->willReturn([
                 'page-1' => [
@@ -74,7 +74,7 @@ final class WorkflowApplicationDelegatorFactoryTest extends TestCase
         $app = $this->createStub(Application::class);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Service "Strategy" must be a ' . ResourceStrategy::class);
+        $this->expectExceptionMessage('Service "Strategy" must be a ' . ResourceStrategyInterface::class);
 
         (new WorkflowApplicationDelegatorFactory())(
             new InMemoryContainer([

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Contenir\Workflow\Factory;
 
 use Contenir\Workflow\Container\WorkflowConfig;
-use Contenir\Workflow\Strategy\ResourceStrategy;
+use Contenir\Workflow\Strategy\ResourceStrategyInterface;
 use Contenir\Workflow\Strategy\RouteRegistrar;
 use InvalidArgumentException;
 use Laminas\Cache\Exception\ExceptionInterface as CacheException;
@@ -29,7 +29,7 @@ final class WorkflowApplicationDelegatorFactory
      *
      * @throws CacheException
      * @throws ContainerExceptionInterface
-     * @throws InvalidArgumentException When no strategy is configured or it is not a ResourceStrategy.
+     * @throws InvalidArgumentException When no strategy is configured or it is not a ResourceStrategyInterface.
      *
      * @mago-expect analysis:mixed-assignment Container services are untyped; the type is checked here.
      * @mago-expect analysis:unused-parameter The delegator signature passes the service name.
@@ -45,11 +45,11 @@ final class WorkflowApplicationDelegatorFactory
 
         $strategyName = $config->requiredString('strategy');
         $strategy     = $container->get($strategyName);
-        if (! $strategy instanceof ResourceStrategy) {
+        if (! $strategy instanceof ResourceStrategyInterface) {
             throw new InvalidArgumentException(sprintf(
                 'Service "%s" must be a %s',
                 $strategyName,
-                ResourceStrategy::class,
+                ResourceStrategyInterface::class,
             ));
         }
 

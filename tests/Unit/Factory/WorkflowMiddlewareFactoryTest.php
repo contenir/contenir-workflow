@@ -6,7 +6,7 @@ namespace Contenir\Workflow\Tests\Unit\Factory;
 
 use Contenir\Workflow\Factory\WorkflowMiddlewareFactory;
 use Contenir\Workflow\Middleware\WorkflowMiddleware;
-use Contenir\Workflow\Strategy\ResourceStrategy;
+use Contenir\Workflow\Strategy\ResourceStrategyInterface;
 use Contenir\Workflow\Tests\TestAsset\Container\InMemoryContainer;
 use InvalidArgumentException;
 use Mezzio\Application;
@@ -25,7 +25,7 @@ final class WorkflowMiddlewareFactoryTest extends TestCase
         $middleware = (new WorkflowMiddlewareFactory())(new InMemoryContainer([
             'config'                 => ['workflow_manager' => ['strategy' => 'Strategy']],
             Application::class       => $this->createStub(Application::class),
-            'Strategy'               => $this->createStub(ResourceStrategy::class),
+            'Strategy'               => $this->createStub(ResourceStrategyInterface::class),
             MiddlewareFactory::class => $this->createStub(MiddlewareFactory::class),
         ]));
 
@@ -45,7 +45,7 @@ final class WorkflowMiddlewareFactoryTest extends TestCase
     public function rejectsAStrategyOfTheWrongType(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Service "Strategy" must be a ' . ResourceStrategy::class);
+        $this->expectExceptionMessage('Service "Strategy" must be a ' . ResourceStrategyInterface::class);
 
         (new WorkflowMiddlewareFactory())(new InMemoryContainer([
             'config'                 => ['workflow_manager' => ['strategy' => 'Strategy']],
